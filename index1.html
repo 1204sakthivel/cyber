@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vulnerability Scanner (Mini Project)</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#eef2f7;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.container{
+    width:500px;
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.2);
+}
+
+h2{
+    text-align:center;
+    color:#0d6efd;
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    background:#0d6efd;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#084298;
+}
+
+#report{
+    margin-top:20px;
+    background:#f8f9fa;
+    padding:15px;
+    border-radius:8px;
+    display:none;
+}
+
+.ok{
+    color:green;
+    font-weight:bold;
+}
+
+.warn{
+    color:red;
+    font-weight:bold;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+table th,table td{
+    border:1px solid #ddd;
+    padding:8px;
+    text-align:left;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Vulnerability Scanner</h2>
+
+<input type="text" id="website" placeholder="Enter Website URL">
+
+<button onclick="scan()">Scan Website</button>
+
+<div id="report"></div>
+
+</div>
+
+<script>
+
+function randomStatus(){
+    return Math.random()>0.5;
+}
+
+function scan(){
+
+let url=document.getElementById("website").value.trim();
+
+if(url==""){
+    alert("Please enter website URL");
+    return;
+}
+
+let https=url.startsWith("https://");
+
+let ports=[
+{port:80,status:randomStatus()},
+{port:443,status:true},
+{port:22,status:randomStatus()},
+{port:21,status:randomStatus()}
+];
+
+let software=[
+{name:"Apache",status:randomStatus()},
+{name:"PHP",status:randomStatus()},
+{name:"MySQL",status:randomStatus()}
+];
+
+let html="<h3>Scan Report</h3>";
+
+html+="<p><b>Target:</b> "+url+"</p>";
+
+html+="<p><b>HTTPS:</b> ";
+
+if(https)
+html+="<span class='ok'>Enabled</span>";
+else
+html+="<span class='warn'>Not Enabled</span>";
+
+html+="</p>";
+
+html+="<h4>Open Ports</h4>";
+
+html+="<table>";
+html+="<tr><th>Port</th><th>Status</th></tr>";
+
+ports.forEach(function(p){
+
+html+="<tr>";
+html+="<td>"+p.port+"</td>";
+
+if(p.status)
+html+="<td class='warn'>Open</td>";
+else
+html+="<td class='ok'>Closed</td>";
+
+html+="</tr>";
+
+});
+
+html+="</table>";
+
+html+="<h4>Software Versions</h4>";
+
+html+="<table>";
+html+="<tr><th>Software</th><th>Status</th></tr>";
+
+software.forEach(function(s){
+
+html+="<tr>";
+html+="<td>"+s.name+"</td>";
+
+if(s.status)
+html+="<td class='warn'>Outdated</td>";
+else
+html+="<td class='ok'>Updated</td>";
+
+html+="</tr>";
+
+});
+
+html+="</table>";
+
+html+="<h4>Recommendations</h4>";
+
+html+="<ul>";
+html+="<li>Use HTTPS.</li>";
+html+="<li>Close unnecessary ports.</li>";
+html+="<li>Keep server software updated.</li>";
+html+="<li>Use strong passwords.</li>";
+html+="<li>Enable a firewall.</li>";
+html+="</ul>";
+
+document.getElementById("report").style.display="block";
+document.getElementById("report").innerHTML=html;
+
+}
+
+</script>
+
+</body>
+</html>
